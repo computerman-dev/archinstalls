@@ -17,7 +17,7 @@ mkdir /etc/dconf/db/gdm.d/
 mkdir /etc/dconf/db/local.d/
 
 # Set the greeter logo (!)
-cp /run/archiso/bootmnt/root/archinstall/lsa-logo-dark.svg /usr/share/pixmaps/lsa-logo-dark.svg
+curl -o /usr/share/pixmaps/lsa-logo-dark.svg https://raw.githubusercontent.com/computerman-dev/archinstalls/main/lsa/lsa-logo-dark.svg
 chmod 644 /usr/share/pixmaps/lsa-logo-dark.svg
 
 cat << EOF > /etc/dconf/profile/gdm
