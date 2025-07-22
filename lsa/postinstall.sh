@@ -1,0 +1,41 @@
+#! /bin/bash
+
+# Set the hostname using the last 8 digits of the serial number
+SERIAL_NUMBER=$(cat /sys/class/dmi/id/product_serial 2>/dev/null)
+SERIAL_NUMBER=$(echo "$SERIAL_NUMBER" | tail -c 9)
+SERIAL_NUMBER="${SERIAL_NUMBER%$'\n'}"
+hostnamectl set-hostname "lsa-$SERIAL_NUMBER"
+
+# Set user display names
+usermod -c "Teacher" teacher
+usermod -c "Student" student
+
+# Create necessary directories
+mkdir /etc/dconf/profile
+mkdir /etc/dconf/db
+mkdir /etc/dconf/db/gdm.d/
+mkdir /etc/dconf/db/local.d/
+
+# Set the greeter logo (!)
+cp /run/archiso/bootmnt/root/archinstall/lsa-logo-dark.svg /usr/share/pixmaps/lsa-logo-dark.svg
+chmod 644 /usr/share/pixmaps/lsa-logo-dark.svg
+
+cat << EOF > /etc/dconf/profile/gdm
+user-db:user
+system-db:gdm
+file-db:/usr/share/gdm/greeter-dconf-defaults
+EOF
+
+cat << EOF > /etc/dconf/db/gdm.d/01-logo
+[org/gnome/login-screen]
+logo='/usr/share/pixmaps/lsa-logo-dark.svg'
+EOF
+
+# Disable Gnome online accounts
+cat << EOF > /etc/dconf/db/local.d/goa
+[org/gnome/online-accounts]
+whitelisted-providers= ['']
+EOF
+
+# Update the system databases to apply changes
+dconf update
