@@ -7,7 +7,7 @@ SERIAL_NUMBER="${SERIAL_NUMBER%$'\n'}"
 echo "lsa-$SERIAL_NUMBER" > /etc/hostname
 
 # Remove unwanted applications
-pacman -Rns gnome-tour gnome-software gnome-contacts gnome-calendar gnome-connections gnome-maps gnome-music
+pacman -Rns gnome-tour gnome-software gnome-contacts gnome-calendar gnome-connections gnome-maps gnome-music gnome-font-viewer simple-scan
 
 # Set user display names
 usermod -c "Teacher" teacher
@@ -32,12 +32,20 @@ USER_DESKTOP_DIR="/home/student/.local/share/applications"
 # These should be just the filenames, e.g., "firefox.desktop"
 # Separate multiple entries with spaces.
 WHITELISTED_DESKTOPS=(
-    "org.gnome.Epiphany.desktop"
-    "org.gnome.Nautilus.desktop"
-    "org.gnome.Calculator.desktop"
-    "org.gnome.TextEditor.desktop"
-    "org.gnome.Snapshot.desktop"
     "gnome-universal-access-panel.desktop"
+    "org.gnome.Calculator.desktop"
+    "org.gnome.Characters.desktop"
+    "org.gnome.clocks.desktop"
+    "org.gnome.Decibels.desktop"
+    "org.gnome.Epiphany.desktop"
+    "org.gnome.Evince.desktop"
+    "org.gnome.Loupe.desktop"
+    "org.gnome.Nautilus.desktop"
+    "org.gnome.Snapshot.desktop"
+    "org.gnome.TextEditor.desktop"
+    "org.gnome.Totem.desktop"
+    "org.gnome.Weather.desktop"
+    "yelp.desktop"
     # Add other .desktop files you want to keep enabled here
 )
 
