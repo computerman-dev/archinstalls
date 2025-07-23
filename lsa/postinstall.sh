@@ -29,8 +29,6 @@ polkit.addRule(function(action, subject) {
     if (action.id == "org.freedesktop.NetworkManager.network-control") {
         return polkit.Result.AUTH_ADMIN;
     }
-    // For other actions, let the default policy apply
-    return polkit.Result.NO;
 });
 EOF
 
@@ -82,11 +80,6 @@ picture-uri-dark='file:///usr/share/backgrounds/lsa-background.svg'
 [org/gnome/desktop/lockdown]
 disable-command-line=true
 user-administration-disabled=true
-EOF
-
-# Set locks
-cat << EOF > /etc/dconf/db/local.d/locks/lockdown
-#Nothing is currently locked.
 EOF
 
 # Update the system databases to apply changes
