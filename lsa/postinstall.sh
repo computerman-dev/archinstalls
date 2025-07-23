@@ -38,10 +38,12 @@ cat << EOF > /etc/dconf/db/gdm.d/01-logo
 logo='/usr/share/pixmaps/lsa-logo-dark.svg'
 EOF
 
-# Disable Gnome online accounts
-cat << EOF > /etc/dconf/db/local.d/goa
+# Gnome settings
+cat << EOF > /etc/dconf/db/local.d/settings
 [org/gnome/online-accounts]
 whitelisted-providers= ['']
+[org/gnome/shell]
+favorite-apps= ['org.gnome.Epiphany.desktop','org.gnome.Nautilus.desktop']
 EOF
 
 # Update the system databases to apply changes
