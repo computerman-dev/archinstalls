@@ -21,6 +21,71 @@ mkdir /etc/dconf/db
 mkdir /etc/dconf/db/gdm.d/
 mkdir /etc/dconf/db/local.d/
 
+# Remove unwanted desktop entries from the student user
+SYSTEM_DESKTOP_DIR="/usr/share/applications"
+USER_DESKTOP_DIR="/home/student/.local/share/applications"
+
+# IMPORTANT: List of .desktop filenames to keep ENABLED (whitelist)
+# These should be just the filenames, e.g., "firefox.desktop"
+# Separate multiple entries with spaces.
+WHITELISTED_DESKTOPS=(
+    "org.gnome.Epiphany.desktop"
+    "org.gnome.Nautilus.desktop"
+    "org.gnome.Calculator.desktop"
+    "org.gnome.TextEditor.desktop"
+    "org.gnome.Snapshot.desktop"
+    "gnome-universal-access-panel.desktop"
+    # Add other .desktop files you want to keep enabled here
+)
+
+# Create user desktop directory if it doesn't exist
+mkdir -p "$USER_DESKTOP_DIR"
+
+# Loop through all .desktop entries in the system's folder
+for system_desktop_file in "$SYSTEM_DESKTOP_DIR"/*.desktop; do
+    if [ -f "$system_desktop_file" ]; then
+        filename=$(basename "$system_desktop_file")
+        user_desktop_path="$USER_DESKTOP_DIR/$filename"
+
+        # Check if the current file is in our whitelist
+        is_whitelisted=false
+        for whitelisted_file in "${WHITELISTED_DESKTOPS[@]}"; do
+            if [[ "$filename" == "$whitelisted_file" ]]; then
+                is_whitelisted=true
+                break
+            fi
+        done
+
+        if [ "$is_whitelisted" = true ]; then
+            echo "Keeping ENABLED (whitelisted): $filename"
+            # If a hidden file for this exists in user's dir, remove it
+            if [ -f "$user_desktop_path" ]; then
+                # Check if it's a "hidden" file created by this script
+                if grep -q "Hidden=true" "$user_desktop_path" || grep -q "NoDisplay=true" "$user_desktop_path"; then
+                    echo "  - Removing disabling file from user directory: $user_desktop_path"
+                    rm "$user_desktop_path"
+                else
+                    echo "  - User-specific override exists, not touching: $user_desktop_path"
+                fi
+            fi
+        else
+            echo "Disabling: $filename"
+            # Create a disabling .desktop file in the user's directory
+            # If it already exists, overwrite it to ensure it's disabled
+            cat > "$user_desktop_path" <<EOL
+[Desktop Entry]
+Hidden=true
+NoDisplay=true
+EOL
+            echo "  - Created/Updated: $user_desktop_path"
+        fi
+    fi
+done
+
+update-desktop-database
+
+
+
 # Prevent non-sudo users from adjusting network
 cat << EOF > /etc/polkit-1/rules.d/90-defaults.rules
 polkit.addRule(function(action, subject) {
@@ -71,14 +136,12 @@ EOF
 
 # Set Gnome settings
 cat << EOF > /etc/dconf/db/local.d/10-defaults
-[org/gnome/desktop/screensaver]
-lock-enabled=false
 
 [org/gnome/online-accounts]
 whitelisted-providers= ['']
 
 [org/gnome/shell]
-favorite-apps= ['org.gnome.Epiphany.desktop','org.gnome.Nautilus.desktop']
+favorite-apps= ['org.gnome.Epiphany.desktop','org.gnome.Nautilus.desktop', 'org.gnome.Calculator.desktop']
 
 [org/gnome/epiphany]
 homepage-url='https://www.ixl.com/signin'
