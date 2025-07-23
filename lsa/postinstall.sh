@@ -6,6 +6,9 @@ SERIAL_NUMBER=$(echo "$SERIAL_NUMBER" | tail -c 9)
 SERIAL_NUMBER="${SERIAL_NUMBER%$'\n'}"
 echo "lsa-$SERIAL_NUMBER" > /etc/hostname
 
+# Remove unwanted applications
+pacman -Rns gnome-tour gnome-software gnome-contacts gnome-calendar gnome-connections gnome-maps gnome-music
+
 # Set user display names
 usermod -c "Teacher" teacher
 usermod -c "Student" student
