@@ -10,11 +10,17 @@ echo "lsa-$SERIAL_NUMBER" > /etc/hostname
 usermod -c "Teacher" teacher
 usermod -c "Student" student
 
+# Enable automatic login for the student user
+sed -i '/^\[daemon\]/a\
+AutomaticLoginEnable=True\
+AutomaticLogin=student' /etc/gdm/custom.conf
+
 # Create necessary directories
 mkdir /etc/dconf/profile
 mkdir /etc/dconf/db
 mkdir /etc/dconf/db/gdm.d/
 mkdir /etc/dconf/db/local.d/
+mkdir /etc/dconf/db/local.d/locks/
 
 # Create GDM profile
 cat << EOF > /etc/dconf/profile/gdm
@@ -44,6 +50,13 @@ cat << EOF > /etc/dconf/db/local.d/settings
 whitelisted-providers= ['']
 [org/gnome/shell]
 favorite-apps= ['org.gnome.Epiphany.desktop','org.gnome.Nautilus.desktop']
+[org/gnome/desktop/lockdown]
+disable-command-line=true
+EOF
+
+# Set locks
+cat << EOF > /etc/dconf/db/local.d/locks/lockdown
+org/gnome
 EOF
 
 # Update the system databases to apply changes
