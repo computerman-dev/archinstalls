@@ -63,7 +63,7 @@ EOF
 
 # Set locks
 cat << EOF > /etc/dconf/db/local.d/locks/lockdown
-#org/gnome
+#Nothing is currently locked.
 EOF
 
 # Update the system databases to apply changes
