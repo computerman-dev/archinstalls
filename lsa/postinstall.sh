@@ -22,6 +22,33 @@ mkdir /etc/dconf/db/gdm.d/
 mkdir /etc/dconf/db/local.d/
 mkdir /etc/dconf/db/local.d/locks/
 
+# Prevent non-sudo users from adjusting network
+cat << EOF > /etc/polkit-1/rules.d/90-defaults
+polkit.addRule(function(action, subject) {
+    // Prevent non-admin users from modifying system-wide connections
+    if (action.id == "org.freedesktop.NetworkManager.settings.modify.system") {
+        return polkit.Result.AUTH_ADMIN;
+    }
+
+    // Prevent non-admin users from modifying their own connections (optional, can be too restrictive)
+    if (action.id == "org.freedesktop.NetworkManager.settings.modify.own" && !subject.isInGroup("sudo") && !subject.isInGroup("wheel")) {
+        return polkit.Result.AUTH_ADMIN;
+    }
+
+    // Prevent non-admin users from enabling/disabling Wi-Fi
+    if (action.id == "org.freedesktop.NetworkManager.enable-disable-wifi" && !subject.isInGroup("sudo") && !subject.isInGroup("wheel")) {
+        return polkit.Result.AUTH_ADMIN;
+    }
+
+    // You might also want to restrict other actions like:
+    // org.freedesktop.NetworkManager.network-control (general network control)
+    // org.freedesktop.NetworkManager.enable-disable-network (enable/disable all networking)
+
+    // For other actions, let the default policy apply
+    return polkit.Result.NO;
+});
+EOF
+
 # Create GDM profile
 cat << EOF > /etc/dconf/profile/gdm
 user-db:user
