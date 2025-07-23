@@ -48,10 +48,13 @@ EOF
 cat << EOF > /etc/dconf/db/local.d/settings
 [org/gnome/online-accounts]
 whitelisted-providers= ['']
+
 [org/gnome/shell]
 favorite-apps= ['org.gnome.Epiphany.desktop','org.gnome.Nautilus.desktop']
+
 [org/gnome/desktop/lockdown]
 disable-command-line=true
+user-administration-disabled=true
 EOF
 
 # Set locks
