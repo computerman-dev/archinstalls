@@ -44,7 +44,13 @@ cat << EOF > /etc/dconf/db/gdm.d/01-logo
 logo='/usr/share/pixmaps/lsa-logo-dark.svg'
 EOF
 
-# Gnome settings
+# Diable the session switcher
+cat << EOF > /etc/dconf/db/gdm.d/01-disable-sessions
+[org/gnome/desktop/session]
+session-chooser-enabled=false
+EOF
+
+# Set Gnome settings
 cat << EOF > /etc/dconf/db/local.d/settings
 [org/gnome/online-accounts]
 whitelisted-providers= ['']
@@ -59,7 +65,7 @@ EOF
 
 # Set locks
 cat << EOF > /etc/dconf/db/local.d/locks/lockdown
-org/gnome
+#org/gnome
 EOF
 
 # Update the system databases to apply changes
