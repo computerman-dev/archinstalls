@@ -4,7 +4,7 @@
 SERIAL_NUMBER=$(cat /sys/class/dmi/id/product_serial 2>/dev/null)
 SERIAL_NUMBER=$(echo "$SERIAL_NUMBER" | tail -c 9)
 SERIAL_NUMBER="${SERIAL_NUMBER%$'\n'}"
-hostnamectl set-hostname "lsa-$SERIAL_NUMBER"
+echo "lsa-$SERIAL_NUMBER" > /etc/hostname
 
 # Set user display names
 usermod -c "Teacher" teacher
