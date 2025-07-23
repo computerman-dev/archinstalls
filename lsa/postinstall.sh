@@ -16,15 +16,22 @@ mkdir /etc/dconf/db
 mkdir /etc/dconf/db/gdm.d/
 mkdir /etc/dconf/db/local.d/
 
-# Set the greeter logo (!)
-curl -o /usr/share/pixmaps/lsa-logo-dark.svg https://raw.githubusercontent.com/computerman-dev/archinstalls/main/lsa/lsa-logo-dark.svg
-chmod 644 /usr/share/pixmaps/lsa-logo-dark.svg
-
+# Create GDM profile
 cat << EOF > /etc/dconf/profile/gdm
 user-db:user
 system-db:gdm
 file-db:/usr/share/gdm/greeter-dconf-defaults
 EOF
+
+# Create user profile
+cat << EOF > /etc/dconf/profile/user
+user-db:user
+system-db:local
+EOF
+
+# Set the greeter logo (!)
+curl -o /usr/share/pixmaps/lsa-logo-dark.svg https://raw.githubusercontent.com/computerman-dev/archinstalls/main/lsa/lsa-logo-dark.svg
+chmod 644 /usr/share/pixmaps/lsa-logo-dark.svg
 
 cat << EOF > /etc/dconf/db/gdm.d/01-logo
 [org/gnome/login-screen]
