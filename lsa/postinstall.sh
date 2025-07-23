@@ -35,23 +35,21 @@ user-db:user
 system-db:local
 EOF
 
-# Set the greeter logo (!)
+# Download the greeter logo
 curl -o /usr/share/pixmaps/lsa-logo-dark.svg https://raw.githubusercontent.com/computerman-dev/archinstalls/main/lsa/lsa-logo-dark.svg
 chmod 644 /usr/share/pixmaps/lsa-logo-dark.svg
 
-cat << EOF > /etc/dconf/db/gdm.d/01-logo
+# Set the GDM default settings
+cat << EOF > /etc/dconf/db/gdm.d/10-defaults
 [org/gnome/login-screen]
 logo='/usr/share/pixmaps/lsa-logo-dark.svg'
-EOF
 
-# Diable the session switcher
-cat << EOF > /etc/dconf/db/gdm.d/01-disable-sessions
 [org/gnome/desktop/session]
 session-chooser-enabled=false
 EOF
 
 # Set Gnome settings
-cat << EOF > /etc/dconf/db/local.d/settings
+cat << EOF > /etc/dconf/db/local.d/10-defaults
 [org/gnome/online-accounts]
 whitelisted-providers= ['']
 
