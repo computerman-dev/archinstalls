@@ -20,13 +20,20 @@ mkdir /etc/dconf/profile
 mkdir /etc/dconf/db
 mkdir /etc/dconf/db/gdm.d/
 mkdir /etc/dconf/db/local.d/
-mkdir /etc/dconf/db/local.d/locks/
 
 # Prevent non-sudo users from adjusting network
 cat << EOF > /etc/polkit-1/rules.d/90-defaults.rules
 polkit.addRule(function(action, subject) {
-    // Prevent non-admin users from modifying system-wide connections
     if (action.id == "org.freedesktop.NetworkManager.network-control") {
+        return polkit.Result.AUTH_ADMIN;
+    }
+    if (action.id == "org.freedesktop.NetworkManager.enable-disable-network") {
+        return polkit.Result.AUTH_ADMIN;
+    }
+    if (action.id == "org.freedesktop.NetworkManager.enable-disable-wifi") {
+        return polkit.Result.AUTH_ADMIN;
+    }
+    if (action.id == "org.freedesktop.NetworkManager.wifi.share.protected") {
         return polkit.Result.AUTH_ADMIN;
     }
 });
@@ -64,6 +71,9 @@ EOF
 
 # Set Gnome settings
 cat << EOF > /etc/dconf/db/local.d/10-defaults
+[org/gnome/desktop/screensaver]
+lock-enabled=false
+
 [org/gnome/online-accounts]
 whitelisted-providers= ['']
 
