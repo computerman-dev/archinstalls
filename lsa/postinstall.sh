@@ -66,6 +66,10 @@ EOF
 curl -o /usr/share/pixmaps/lsa-logo-dark.svg https://raw.githubusercontent.com/computerman-dev/archinstalls/main/lsa/lsa-logo-dark.svg
 chmod 644 /usr/share/pixmaps/lsa-logo-dark.svg
 
+# Download the desktop wallpaper
+curl -o /usr/share/backgrounds/lsa-background.svg https://raw.githubusercontent.com/computerman-dev/archinstalls/main/lsa/lsa-background.svg
+chmod 644 /usr/share/backgrounds/lsa-background.svg
+
 # Set the GDM default settings
 cat << EOF > /etc/dconf/db/gdm.d/10-defaults
 [org/gnome/login-screen]
@@ -85,6 +89,9 @@ favorite-apps= ['org.gnome.Epiphany.desktop','org.gnome.Nautilus.desktop']
 
 [org/gnome/epiphany]
 homepage-url='https://www.ixl.com/signin'
+
+[org/gnome/desktop/background]
+picture-uri='file:///usr/share/backgrounds/lsa-background.svg'
 
 [org/gnome/desktop/lockdown]
 disable-command-line=true
