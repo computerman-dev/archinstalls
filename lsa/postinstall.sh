@@ -7,7 +7,8 @@ SERIAL_NUMBER="${SERIAL_NUMBER%$'\n'}"
 echo "lsa-$SERIAL_NUMBER" > /etc/hostname
 
 # Remove unwanted applications
-pacman -Rns gnome-tour gnome-software gnome-contacts gnome-calendar gnome-connections gnome-maps gnome-music gnome-font-viewer simple-scan --noconfirm
+pacman -Syu showtime --noconfirm
+pacman -Rns gnome-tour gnome-software gnome-contacts gnome-calendar gnome-connections gnome-maps gnome-music gnome-font-viewer simple-scan totem --noconfirm
 
 # Set user display names
 usermod -c "Teacher" teacher
